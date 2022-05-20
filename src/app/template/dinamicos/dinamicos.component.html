@@ -1,1 +1,75 @@
-<p>dinamicos works!</p>
+<h2>Template:<small>Dinámicos</small></h2>
+<form (ngSubmit)="guardar()" autocomplete="off" #miFormulario="ngForm">
+
+    <!-- Nombre -->
+    <div class="mb-3 row">
+        <label class="col-sm-3 col-form-label">Nombre</label>
+        <div class="col-sm-9">
+            <input class="form-control" [ngModel]="persona.nombre" name="nombre" placeholder="Nombre de la persona" required>
+
+            <span class="form-text text-danger" *ngIf="nombreValido()">
+                Este campo es obligatorio
+            </span>
+        </div>
+    </div>
+
+    <!-- Favoritos -->
+    <div class="mb-3 row">
+        <label class="col-sm-3 col-form-label">Agregar</label>
+        <div class="col-sm-9">
+            <div class="input-group">
+                <input  class="form-control"
+                        placeholder="Agregar Favorito">
+
+                <button class="btn btn-outline-primary" type="button">
+                    Agregar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista de Juegos Favoritos -->
+<div class="mb-3 row">
+    <label class="col-sm-3 col-form-label">Favoritos</label>
+    <div class="col-sm-9">
+        <input  *ngFor="let juego of persona.favoritos; let i = index"
+                [(ngModel)]="juego.nombre"
+                name="favorito_{{ i }}"
+                class="form-control mb-1"
+                required="">
+
+    </div>
+</div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <button type="button" class="btn btn-primary float-end" [disabled]="miFormulario.invalid"
+                (click)="guardar()">
+                Guardar
+            </button>
+        </div>
+    </div>
+</form>
+
+<div class="row">
+    <div class="col">
+
+        <span>Valid</span>
+        <pre>{{ miFormulario.valid }}</pre>
+
+        <span>Pristibe</span>
+        <pre>{{ miFormulario.pristine }}</pre>
+
+        <span>Touched</span>
+        <pre>{{ miFormulario.touched }}</pre>
+
+        <span>Value</span>
+        <pre>{{ miFormulario.value | json }}</pre>
+
+        <span>CustomDirective</span>
+        <pre>{{ miFormulario.controls['existecias']?.errors | json }}</pre>
+
+        <span>Persona</span>
+        <pre>{{ persona | json }}</pre>
+    </div>
+</div>
