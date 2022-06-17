@@ -31,7 +31,7 @@
                             >
                         <span class="form-text text-danger"
                             *ngIf="campoEsValid('email')">
-                        Debe de ser en formato ded nombre y apellido
+                            {{ emailErrorMsg }}
                     </span>
                 </div>
             </div>
@@ -40,8 +40,14 @@
             <div class="row mb-3">
                 <label class="col-sm-3 col-form-label">Username</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" placeholder="Username de Usuario">
-
+                    <input  type="text" 
+                            class="form-control" 
+                            formControlName="username"
+                            placeholder="Username de Usuario" >
+                    <span class="form-text text-danger"
+                            *ngIf="campoEsValid('username')">
+                        Username no disponible
+                    </span>
                 </div>
             </div>
 
@@ -49,8 +55,14 @@
             <div class="row mb-3">
                 <label class="col-sm-3 col-form-label">Password</label>
                 <div class="col-sm-9">
-                    <input type="password" class="form-control" placeholder="Password de Usuario">
-
+                    <input  type="password" 
+                            class="form-control" 
+                            formControlName="password"
+                            placeholder="Password de Usuario">
+                    <span class="form-text text-danger"
+                            *ngIf="campoEsValid('password')">
+                        La contraseña debe de ser mayor de 6 caracteres. 
+                    </span>
                 </div>
             </div>
 
@@ -58,15 +70,22 @@
             <div class="row mb-3">
                 <label class="col-sm-3 col-form-label">Confirmar</label>
                 <div class="col-sm-9">
-                    <input type="password" class="form-control" placeholder="Confimar la contraseña">
-
+                    <input  type="password" 
+                            class="form-control" 
+                            formControlName="password2"
+                            placeholder="Confimar la contraseña">
+                        <span class="form-text text-danger"
+                            *ngIf="campoEsValid('password2')">
+                        Las contraseñas deben de ser iguales.
+                    </span>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col">
                     <button class="btn btn-primary float-end"
-                            type="submit">
+                            [disabled]="miFormulario.pending"
+                            type="submit"> 
                         Crear
                     </button>
                 </div>
@@ -78,7 +97,13 @@
 
 <h5>Valid</h5>
 <pre>{{ miFormulario.valid }}</pre>
+<h5>Status</h5>
+<pre>{{ miFormulario.status }}</pre>
+<h5>Pending</h5>
+<pre>{{ miFormulario.status }}</pre>
 <h5>Nombre</h5>
 <pre>{{ miFormulario.controls['nombre'].errors | json }}</pre>
 <h5>Email</h5>
 <pre>{{ miFormulario.controls['email'].errors | json }}</pre>
+<h5>Username</h5>
+<pre>{{ miFormulario.controls['username'].errors | json }}</pre>

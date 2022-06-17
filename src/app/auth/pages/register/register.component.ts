@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { ValidatorService } from 'src/app/shared/validator/validator.service';
+import { EmailValidatorService } from '../../../shared/validator/email-validator.service';
 
 @Component({
   selector: 'app-register',
@@ -9,15 +11,35 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class RegisterComponent implements OnInit {
 
-  nombreApellidoPattern : string = '([a-zA-Z]+) ([a-zA-Z]+)';
-  emailPattern: string = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$";
-
   miFormulario: FormGroup = this.fb.group({
-    nombre:  ['',[ Validators.required, Validators.pattern( this.nombreApellidoPattern ) ]],
-    email:  ['',[ Validators.required, Validators.pattern( this.emailPattern ) ]]
+    nombre:  ['',[ Validators.required, Validators.pattern( this.validatorService.nombreApellidoPattern ) ]],
+    email:  ['',[ Validators.required, Validators.pattern( this.validatorService.emailPattern ) ], [ this.emailValidator ]],
+    username:  ['',[ Validators.required, this.validatorService.noPuedeSerStrider ]],
+    password:  ['',[ Validators.required, Validators.minLength(6) ]],
+    password2: ['', [ Validators.required ]]
+  }, {
+    validators: [ this.validatorService.camposIguales('password', 'password2') ]
   });
 
-  constructor( private fb: FormBuilder ) { }
+get emailErrorMsg(): string{
+
+  const errors = this.miFormulario.get('email')?.errors;
+
+  if(errors?.['required']){
+    return 'Email es obligatorio.'
+  } else if( errors?.['pattern'] ){
+    return 'El valor ingresado no tiene el formato correo.'
+  } else if( errors?.['emailTomado'] ){
+    return 'El email ya fue tomado.'
+  }
+
+  return ''
+}
+
+
+  constructor( private fb: FormBuilder, 
+               private validatorService: ValidatorService,
+               private emailValidator: EmailValidatorService ) { }
 
   ngOnInit(): void {
   }
